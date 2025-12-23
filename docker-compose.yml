@@ -1,0 +1,89 @@
+
+services:
+  backend: 
+    build: ./backend
+    container_name: mern-backend
+    ports:
+      - '5100:5000'
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: "docker"
+      DB_HOST: db
+      LINE_CHANNEL_SECRET: a93683f47ccef79e36f56b24537eb71d
+      LINE_CHANNEL_ACCESS_TOKEN: ToC+ViAeTnmcLO3BfoK1q+C3rykhimm+6QuBNE8ef8x7Oa/qaucUg3POXdzA/FHLLHUV93X5VllRuwU1ohsp35aE5cVy+v6YM4P0xs7Je3ntP01U75uv3cWmymmYr0f5GjvjQ08aHeOm/NlPs8cucAdB04t89/1O/w1cDnyilFU=
+
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - mynetwork
+   
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_ARBITRARY: 1
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+  frontend:
+    build: ./frontend
+    container_name: mern-frontend
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - mynetwork
+
+  db:
+    image: mysql:latest
+    container_name: db
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: project_db
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./project_db.sql:/docker-entrypoint-initdb.d/project_db.sql
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  line-bot:
+    build: ./line-bot
+    container_name: line-bot
+    ports:
+      - "3100:3100"
+    env_file:
+      - ./line-bot/.env 
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:
+
+volumes:
+  db_data:
