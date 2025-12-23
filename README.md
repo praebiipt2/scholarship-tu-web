@@ -9,3 +9,7 @@
 4.docker compose up -d เพื่อให้สร้าง container และรัน
 
 5.docker compose restart backend ต่อเพื่อให้ backend restart หลังจาก database ทำงานแล้ว ไม่งั้น backend จะดึงข้อมูลจาก database ไม่ได้
+
+mail for demo :
+
+daw@gmail.com pass 1234
