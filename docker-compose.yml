@@ -13,9 +13,8 @@ services:
     environment:
       NODE_ENV: "docker"
       DB_HOST: db
-      LINE_CHANNEL_SECRET: a93683f47ccef79e36f56b24537eb71d
-      LINE_CHANNEL_ACCESS_TOKEN: ToC+ViAeTnmcLO3BfoK1q+C3rykhimm+6QuBNE8ef8x7Oa/qaucUg3POXdzA/FHLLHUV93X5VllRuwU1ohsp35aE5cVy+v6YM4P0xs7Je3ntP01U75uv3cWmymmYr0f5GjvjQ08aHeOm/NlPs8cucAdB04t89/1O/w1cDnyilFU=
-
+      LINE_CHANNEL_SECRET: xxxxxxx
+      LINE_CHANNEL_ACCESS_TOKEN: xxxxxxxx
     depends_on:
       db:
         condition: service_healthy
